@@ -1,6 +1,6 @@
 
 
-ELS_collapse <- function(splitCol, meanCol, data){
+oneway_collapse <- function(splitCol, meanCol, data){
   #helper function for generating the barplots 
   value <- as.data.frame(as.list(aggregate(data[, meanCol] ~ data[, splitCol], FUN = function(x) c(mean(x), lowsd(x), highsd(x)), simplify=T)))
   
@@ -20,7 +20,7 @@ print_multiPlot_1w_onewayanova_outlier <- function(withinVar, curOutputs, data, 
     lowSD_thresh <- mean(data[, var], na.rm=T) - thresh*sd(data[, var], na.rm=T)
     highSD_thresh <- mean(data[, var], na.rm=T) + thresh*sd(data[, var], na.rm=T)
     
-    tempDF <- cbind(output = var,  ELS_collapse(withinVar, var, data[data[, var]<highSD_thresh & data[, var]>lowSD_thresh, ]))
+    tempDF <- cbind(output = var,  oneway_collapse(withinVar, var, data[data[, var]<highSD_thresh & data[, var]>lowSD_thresh, ]))
     curAnova <- Anova(lmer(eval(parse(text=paste0(var, ' ~ ',  withinVar, ' + (1|subNum) ' , covs))), data[data[, var]<highSD_thresh & data[, var]>lowSD_thresh, ]), type=3, test.statistic = 'F')
     
     if(log_values == T){
